@@ -3,17 +3,19 @@
 1) Запустить выполнение скрипта для создания схемы таблицы (файл E:\Projects\graph_sql_api_test\scripts\sql\clients.sql)
 2) Установить переменную окружения DB_CONN в креденшлы БД, напр. "postgres://postgres:postgres@127.0.0.1:5432/test_db?sslmode=disable"
 3) Запустить модуль в папке cmd/graph_sql_api_test_serviced:
-   go run .
+   **go run .**
 
-4) В Postman создать POST запрос на localhost:2121/client
+4) В Postman создать POST запрос на **localhost:2121/client**
 
 
 4.1) Листинг всех записей (c возможностью фильтрации по имени по частичному вхождению поискового запроса):
-QUERY:
+
+**QUERY:**
+
 query GetClients ($client_name: String, $limit: Int!, $offset: Int!)
 {
   clients_count #counts total records, for pager in frontend
- 
+   
   clients (client_name: $client_name, limit: $limit, offset: $offset){
      id
      client_name
@@ -22,7 +24,8 @@ query GetClients ($client_name: String, $limit: Int!, $offset: Int!)
 }
 
 
-GRAPHQL VARIABLES:
+**GRAPHQL VARIABLES:**
+
 {
     "client_name": "", #here can be some filter example нест
     "limit": 15,
@@ -30,11 +33,11 @@ GRAPHQL VARIABLES:
 }
 
 
-
-
 4.2) Получение записи по её ID:
 
-QUERY:
+**QUERY:**
+
+
 query GetClientByID ($id: Int!){
   client (id: $id) {
       id
@@ -43,14 +46,13 @@ query GetClientByID ($id: Int!){
     }
   }
 
-GRAPHQL VARIABLES:
+**GRAPHQL VARIABLES:**
+
+
 {
     "id": 155
 }
 
 
-
-
-
-
+Refs.:
 https://pkg.go.dev/github.com/graphql-go/graphql

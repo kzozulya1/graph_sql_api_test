@@ -79,7 +79,8 @@ func GetClientSchema(db *pg.DB) *graphql.Schema {
 							Type:        graphql.String,
 						},
 						//Pagination filter
-						"limit": &graphql.ArgumentConfig{
+						//first is a limit analog
+						"first": &graphql.ArgumentConfig{
 							Description: "Pagination limit filter",
 							Type:        graphql.Int,
 						},
@@ -89,7 +90,7 @@ func GetClientSchema(db *pg.DB) *graphql.Schema {
 						},
 					},
 					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-						clients, err := getClients(db, p.Args["client_name"].(string), p.Args["limit"].(int), p.Args["offset"].(int))
+						clients, err := getClients(db, p.Args["client_name"].(string), p.Args["first"].(int), p.Args["offset"].(int))
 						if err != nil {
 							return nil, fmt.Errorf("clients fetch err: %s", err.Error())
 						}
@@ -97,7 +98,7 @@ func GetClientSchema(db *pg.DB) *graphql.Schema {
 					},
 				},
 
-				"clients_count": &graphql.Field{
+				"totalCount": &graphql.Field{
 					Type: graphql.Int,
 					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 						cnt, err := getClientsCount(db)
@@ -128,7 +129,7 @@ func getClient(db *pg.DB, id int) (interface{}, error) {
 }
 
 //getClients return clients slice by filter
-func getClients(db *pg.DB, clientName string, limit, offset int) (interface{}, error) {
+func getClients(db *pg.DB, clientName string, first, offset int) (interface{}, error) {
 	var (
 		clients []*storage.Client
 		model   = db.Model(&clients)
@@ -137,8 +138,8 @@ func getClients(db *pg.DB, clientName string, limit, offset int) (interface{}, e
 	if clientName != "" {
 		model.Where("client_name ILIKE '%" + clientName + "%'")
 	}
-	if limit != 0 {
-		model.Limit(limit)
+	if first != 0 {
+		model.Limit(first)
 	}
 	if offset != 0 {
 		model.Offset(offset)

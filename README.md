@@ -12,11 +12,10 @@
 
 ##### QUERY:
 ```go
-query GetClients ($client_name: String, $limit: Int!, $offset: Int!)
+query GetClients ($client_name: String, $first: Int!, $offset: Int!)
 {
-  clients_count #counts total records, for pager in frontend
-   
-  clients (client_name: $client_name, limit: $limit, offset: $offset){
+  totalCount
+  clients (client_name: $client_name, first: $first, offset: $offset){
      id
      client_name
      ur_adr
@@ -28,9 +27,9 @@ query GetClients ($client_name: String, $limit: Int!, $offset: Int!)
 ##### GRAPHQL VARIABLES:
 ```go
 {
-    "client_name": "", #here can be some filter example нест
-    "limit": 15,
-    "offset": 0
+    "client_name": "",
+    "first": 5,
+    "offset": 1
 }
 ```
 
@@ -109,6 +108,35 @@ query GetClient($id: Int!, $withUrAdr: Boolean!)
     "id": 154,
     "withUrAdr": true
 }
+```
+
+#### 4.2.4) Инлайн-фрагменты (по условию типа объекта):
+
+##### QUERY:
+```go
+{
+  client(id: 153){
+     __typename
+     client_name
+     ... on Client{
+         ur_adr
+     }
+  }
+}
+
+```
+
+#### 4.2.5) Мета данные (тип объекта):
+
+##### QUERY:
+```go
+{
+  client(id: 153){
+     __typename
+     client_name
+  }
+}
+
 ```
 
 

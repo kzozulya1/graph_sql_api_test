@@ -1,17 +1,17 @@
-Модуль для выполнения CRUD операций с таблицей БД (Postgres) для GraphQL интерфейса:
+### Модуль для выполнения CRUD операций с таблицей БД (Postgres) для GraphQL интерфейса
 
-1) Запустить выполнение скрипта для создания схемы таблицы (файл E:\Projects\graph_sql_api_test\scripts\sql\clients.sql)
-2) Установить переменную окружения DB_CONN в креденшлы БД, напр. "postgres://postgres:postgres@127.0.0.1:5432/test_db?sslmode=disable"
+1) Запустить выполнение скрипта для создания схемы таблицы (файл `E:\Projects\graph_sql_api_test\scripts\sql\clients.sql`)
+2) Установить переменную окружения DB_CONN в креденшлы БД, напр. `"postgres://postgres:postgres@127.0.0.1:5432/test_db?sslmode=disable"`
 3) Запустить модуль в папке cmd/graph_sql_api_test_serviced:
    **go run .**
 
 4) В Postman создать POST запрос на **localhost:2121/client**
 
 
-4.1) Листинг всех записей (c возможностью фильтрации по имени по частичному вхождению поискового запроса):
+#### 4.1) Листинг всех записей (c возможностью фильтрации по имени по частичному вхождению поискового запроса):
 
-**QUERY:**
-
+##### QUERY:
+```go
 query GetClients ($client_name: String, $limit: Int!, $offset: Int!)
 {
   clients_count #counts total records, for pager in frontend
@@ -22,22 +22,23 @@ query GetClients ($client_name: String, $limit: Int!, $offset: Int!)
      ur_adr
   }
 }
+```
 
 
-**GRAPHQL VARIABLES:**
-
+##### GRAPHQL VARIABLES:
+```go
 {
     "client_name": "", #here can be some filter example нест
     "limit": 15,
     "offset": 0
 }
+```
 
 
-4.2) Получение записи по её ID:
+#### 4.2) Получение записи по её ID:
 
-**QUERY:**
-
-
+##### QUERY:
+```go
 query GetClientByID ($id: Int!){
   client (id: $id) {
       id
@@ -45,20 +46,19 @@ query GetClientByID ($id: Int!){
       ur_adr
     }
   }
+```
 
-**GRAPHQL VARIABLES:**
-
-
+##### GRAPHQL VARIABLES:
+```go
 {
     "id": 155
 }
+```
 
+#### 4.2.1) Псевдонимы записей - получение набора записей:
 
-4.2.1) Псевдонимы записей - получение набора записей:
-
-**QUERY:**
-
-
+##### QUERY:
+```go
 {
   client151: client(id: 151) {
     client_name
@@ -67,12 +67,12 @@ query GetClientByID ($id: Int!){
     client_name
   }
 }
+```
 
-4.2.2) Фрагменты записей - получение набора записей:
+#### 4.2.2) Фрагменты записей - получение набора записей:
 
-**QUERY:**
-
-
+##### QUERY:
+```go
 {
   client151: client(id: 151) {
     ...fields
@@ -81,23 +81,18 @@ query GetClientByID ($id: Int!){
     ...fields
   }
 }
-
-
 
 fragment fields on Client {
   client_name
   ur_adr
   
 }
+```
 
+#### 4.2.3) Директивы:
 
-4.2.3) Директивы:
-
-
-**QUERY:**
-
-
-
+##### QUERY:
+```go
 query GetClient($id: Int!, $withUrAdr: Boolean!)
 {
   client(id: $id){
@@ -106,18 +101,17 @@ query GetClient($id: Int!, $withUrAdr: Boolean!)
      ur_adr @include (if: $withUrAdr)
   }
 }
+```
 
-
-**GRAPHQL VARIABLES:**
-
-
+##### GRAPHQL VARIABLES:
+```go
 {
     "id": 154,
     "withUrAdr": true
 }
+```
 
 
+###### Refs.:
 
-
-Refs.:
-https://pkg.go.dev/github.com/graphql-go/graphql
+> https://pkg.go.dev/github.com/graphql-go/graphql

@@ -281,6 +281,8 @@ mutation DeleteFewClientsObj {
 			}
 ```
 
+
+
 ###### Refs.:
 
 > https://pkg.go.dev/github.com/graphql-go/graphql

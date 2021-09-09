@@ -1,11 +1,11 @@
 ### Модуль для выполнения CRUD операций с таблицей БД (Postgres) для GraphQL интерфейса
 
-1) Запустить выполнение скрипта для создания схемы таблицы (файл `E:\Projects\graph_sql_api_test\scripts\sql\clients.sql`)
-2) Установить переменную окружения DB_CONN в креденшлы БД, напр. `"postgres://postgres:postgres@127.0.0.1:5432/test_db?sslmode=disable"`
+1) Запустить выполнение скрипта для создания схемы таблицы (файл `scripts/sql/clients.sql`)
+2) Установить переменную окружения DB_CONN в креденшлы БД, напр. `postgres://postgres:postgres@127.0.0.1:5432/test_db?sslmode=disable`
 3) Запустить модуль в папке cmd/graph_sql_api_test_serviced:
-   **go run .**
+   `go run . `
 
-4) В Postman создать POST запрос на **localhost:2121/client**
+4) В Postman создать POST запрос на `http://localhost:2121/client`
 
 
 #### 4.1) Листинг всех записей (c возможностью фильтрации по имени по частичному вхождению поискового запроса):

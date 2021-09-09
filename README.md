@@ -12,7 +12,7 @@
 
 ##### QUERY:
 ```go
-query GetClients ($client_name: String, $first: Int!, $offset: Int!)
+query GetClients ($client_name: String, $first: Int, $offset: Int)
 {
   totalCount
   clients (client_name: $client_name, first: $first, offset: $offset){
@@ -25,11 +25,12 @@ query GetClients ($client_name: String, $first: Int!, $offset: Int!)
 
 
 ##### GRAPHQL VARIABLES:
+Все поля - необязательные
 ```go
 {
-    "client_name": "",
-    "first": 5,
-    "offset": 1
+    "client_name": "ООО",
+    "first": 5, 
+    "offset": 0
 }
 ```
 
@@ -48,6 +49,7 @@ query GetClientByID ($id: Int!){
 ```
 
 ##### GRAPHQL VARIABLES:
+id - обязательное поле
 ```go
 {
     "id": 155
@@ -139,6 +141,145 @@ query GetClient($id: Int!, $withUrAdr: Boolean!)
 
 ```
 
+#### 4.3) Создание новой записи:
+
+##### QUERY:
+```go
+mutation CreateClientObj($clientName: String!, $urAdr: String! ) {
+  createClient(client_name: $clientName, ur_adr: $urAdr) {
+    id,
+    client_name,
+    ur_adr
+  }
+}
+```
+
+##### GRAPHQL VARIABLES:
+```go
+{
+    "clientName": "Ksenia R.",
+    "urAdr": "Moscow, Kievskaya, 23"
+}
+```
+
+#### 4.4) Обновление существующей записи:
+
+##### QUERY:
+```go
+mutation UpdateClientObj($id: Int!, $clientName: String, $urAdr: String) {
+  updateClient(id: $id, client_name: $clientName, ur_adr: $urAdr) {
+    id,
+    client_name,
+    ur_adr
+  }
+}
+```
+
+##### GRAPHQL VARIABLES:
+```go
+{
+    "id": 1,
+    "clientName": "Petr Ivanov",
+    "urAdr": ""
+}
+```
+
+
+#### 4.4.1) Обновление 2х существующих записей:
+
+##### QUERY:
+```go
+mutation Update2Clients($id: Int!, $clientName: String, $urAdr: String) {
+  firstUpd: updateClient(id: $id, client_name: $clientName, ur_adr: $urAdr) {
+    ... ClientFields
+  }
+
+  secUpd: updateClient(id: 2, client_name: "Second client", ur_adr: "Praha, Zlata 45") {
+    ... ClientFields
+  }
+}
+
+fragment ClientFields on Client {
+    id,
+    client_name,
+    ur_adr
+}
+
+```
+
+##### GRAPHQL VARIABLES:
+
+```go
+{
+    "id": 1,
+    "clientName": "Kosta Z.",
+    "urAdr": "Piterburg"
+}
+```
+
+
+
+#### 4.5) Удаление существующей записи:
+
+##### QUERY:
+```go
+mutation DeleteClientObj($id: Int!) {
+  deleteClient(id: $id) {
+    id,
+    client_name,
+    ur_adr
+  }
+}
+```
+
+##### GRAPHQL VARIABLES:
+```go
+{
+    "id": 4
+}
+```
+
+#### 4.5.1) Удаление нескольких существующих записей:
+
+##### QUERY:
+```go
+mutation DeleteFewClientsObj {
+  rem1: deleteClient(id: 1) {
+    id
+  }
+  rem2:  deleteClient(id: 2) {
+    id
+  }
+  rem3: deleteClient(id: 3) {
+    id
+  }
+}
+```
+
+
+> Лайвхак - чтобы в graphQL бекэнде сделать какой то аргумент необязательным (nullable), нужно указать `DefaultValue: ""`, напр.:
+```go
+"updateClient": &graphql.Field{
+				Type: modelType,
+				Args: graphql.FieldConfigArgument{
+					"id": &graphql.ArgumentConfig{
+						Description: "Client ID",
+						Type:        graphql.NewNonNull(graphql.Int),
+					},
+					"client_name": &graphql.ArgumentConfig{
+						Description:  "Client name",
+						Type:         graphql.String,
+						DefaultValue: "",
+					},
+					"ur_adr": &graphql.ArgumentConfig{
+						Description:  "Client juridical address",
+						Type:         graphql.String,
+						DefaultValue: "",
+					},
+				},
+				...
+			}
+```
 
 ###### Refs.:
 

@@ -11,7 +11,6 @@ import (
 	"github.com/go-pg/pg/v10"
 	"github.com/kelseyhightower/envconfig"
 
-	// "github.com/labstack/echo/middleware"
 	"github.com/graphql-go/handler"
 	"github.com/kzozulya1/graph_sql_api_test/internal/schema"
 	"github.com/sirupsen/logrus"
@@ -31,7 +30,6 @@ func New() *Server {
 
 	server.initConfig()
 	server.initDBConn()
-	//server.useMiddleware()
 	server.initRoutes()
 	return server
 }
@@ -66,17 +64,6 @@ func (s *Server) initDBConn() {
 		panic(fmt.Errorf("db init err: %s", err.Error()))
 	}
 }
-
-// initRouter inits routers
-// func (s *Server) useMiddleware() {
-// 	logrus.Infof("http server: use CORS middleware...")
-
-// 	s.Server.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-// 		AllowOrigins: []string{"*"},
-// 		AllowMethods: []string{"GET", "HEAD", "PUT", "POST", "DELETE", "OPTIONS"},
-// 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
-// 	}))
-// }
 
 // Run starts service
 func (s *Server) Run() error {

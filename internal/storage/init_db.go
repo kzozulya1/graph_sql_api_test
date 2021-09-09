@@ -21,7 +21,7 @@ func (d dbLogger) BeforeQuery(c context.Context, q *pg.QueryEvent) (context.Cont
 		return c, fmt.Errorf("error from q.FormattedQuery: %s", err.Error())
 	}
 
-	logrus.Infof("SQL debug (db %s): %s\n", d.Database, string(fmtQuery))
+	logrus.Infof("SQL debug (db %s): %s", d.Database, string(fmtQuery))
 	return c, nil
 }
 

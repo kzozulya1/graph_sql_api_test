@@ -54,5 +54,70 @@ query GetClientByID ($id: Int!){
 }
 
 
+4.2.1) Псевдонимы записей - получение набора записей:
+
+**QUERY:**
+
+
+{
+  client151: client(id: 151) {
+    client_name
+  }
+  client154: client(id: 154) {
+    client_name
+  }
+}
+
+4.2.2) Фрагменты записей - получение набора записей:
+
+**QUERY:**
+
+
+{
+  client151: client(id: 151) {
+    ...fields
+  }
+  client154: client(id: 154) {
+    ...fields
+  }
+}
+
+
+
+fragment fields on Client {
+  client_name
+  ur_adr
+  
+}
+
+
+4.2.3) Директивы:
+
+
+**QUERY:**
+
+
+
+query GetClient($id: Int!, $withUrAdr: Boolean!)
+{
+  client(id: $id){
+     id
+     client_name
+     ur_adr @include (if: $withUrAdr)
+  }
+}
+
+
+**GRAPHQL VARIABLES:**
+
+
+{
+    "id": 154,
+    "withUrAdr": true
+}
+
+
+
+
 Refs.:
 https://pkg.go.dev/github.com/graphql-go/graphql
